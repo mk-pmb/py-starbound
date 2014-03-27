@@ -2,6 +2,7 @@
 
 import optparse
 import os
+import osutil
 import sys
 
 import starbound
@@ -16,7 +17,7 @@ def main():
         raise ValueError('Only one argument is supported (package path)')
     package_path = arguments[0]
 
-    base = options.path if options.path else '.'
+    basepath = options.path if options.path else '.'
 
     with starbound.open_file(package_path) as package:
         if not isinstance(package, starbound.Package):
@@ -33,7 +34,8 @@ def main():
         percentage_count = max(len(paths) // 100, 1)
 
         for path in paths:
-            dest_path = base + path
+            dest_path = os.path.join(basepath, path)
+            dest_path = osutil.normsubpath(dest_path)   # <-- stay inside ./
 
             dir_path = os.path.dirname(dest_path)
             if not os.path.exists(dir_path):
