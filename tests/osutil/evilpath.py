@@ -31,11 +31,12 @@ os_path_libs = (
     )
 
 for p in somepaths:
-    print 'orig:\t', p
     print 'repr:\t', repr(p)
+    print 'orig:\t', p
     try:
         for os, lib in os_path_libs:
-            print os + ':\t', osutil.normsubpath(p, lib.normpath)
+            print os + ':\t',
+            print osutil.normsubpath(p, lib)
     except Exception as err:
-        print err
+        print repr(err)
     print

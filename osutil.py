@@ -10,19 +10,15 @@ import posixpath
 
 
 
-def normsubpath(path, target_opsys_normpath = None):
-    # convert to posix syntax to allow os-independent checks:
-    path = posixpath.normpath(path)
-
-    # security checks
-    if path.lstrip('.').startswith('/'):
+def normsubpath(path, target_os_path = None):
+    if target_os_path is None:
+        target_os_path = os.path
+    rel_up = target_os_path.join(target_os_path.pardir, '')
+    path = target_os_path.normpath(path)
+    path = target_os_path.relpath(path)
+    if path.startswith(rel_up):
         raise ValueError('path points upwards', path)
-
-    # convert back to platform-dependent path syntax:
-    if target_opsys_normpath is None:
-        target_opsys_normpath = os.path.normpath
-    path = target_opsys_normpath(path)
-    return path
+    return  path
 
 
 
